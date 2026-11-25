@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Подготовка к личностям</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --border: #2d3a4f;
+      --text: #e8eef7;
+      --text-muted: #9fb0c7;
+      --accent: #5b9fd4;
+      --accent-hover: #7ab3e0;
+      --success: #4caf7a;
+      --success-bg: rgba(76, 175, 122, 0.15);
+      --warning: #e0a24a;
+      --danger: #e06c6c;
+      --danger-bg: rgba(224, 108, 108, 0.15);
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.55;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(91,159,212,0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(76,175,122,0.08), transparent);
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+      padding-top: 12px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #e8eef7 0%, #5b9fd4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .stats {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .stat strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .modes {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn:hover {
+      background: var(--surface2);
+      border-color: var(--accent);
+    }
+
+    .mode-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0f1419;
+      font-weight: 600;
+    }
+
+    .search-wrap {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px 14px 48px;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap input::placeholder { color: var(--text-muted); }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.22s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-num {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card .short {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card .years {
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Detail panel */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 12, 18, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .detail-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px 28px 40px;
+      transform: translateY(40px);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 -12px 40px rgba(0,0,0,0.4);
+    }
+
+    .detail-overlay.open .detail-panel {
+      transform: translateY(0);
+    }
+
+    @media (min-width: 700px) {
+      .detail-overlay { align-items: center; }
+      .detail-panel {
+        border-radius: 24px;
+        max-height: 85vh;
+      }
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .detail-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .close-btn {
+      background: var(--surface2);
+      border: none;
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .close-btn:hover { background: var(--border); }
+
+    .section { margin-bottom: 20px; }
+
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .section-content {
+      font-size: 1.02rem;
+      color: var(--text);
+    }
+
+    /* Study / Quiz */
+    .study-area { display: none; }
+    .study-area.active { display: block; }
+    .list-area { display: block; }
+    .list-area.hidden { display: none; }
+
+    .quiz-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-num {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .quiz-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: center;
+      line-height: 1.25;
+    }
+
+    .quiz-label {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 22px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .option:hover:not(.disabled) {
+      border-color: var(--accent);
+      background: rgba(91, 159, 212, 0.12);
+    }
+
+    .option.correct {
+      border-color: var(--success);
+      background: var(--success-bg);
+      color: #a8e6c1;
+    }
+
+    .option.wrong {
+      border-color: var(--danger);
+      background: var(--danger-bg);
+      color: #f0a0a0;
+    }
+
+    .option.disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
+
+    .option.correct.disabled,
+    .option.wrong.disabled {
+      opacity: 1;
+    }
+
+    .feedback {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      text-align: center;
+      display: none;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.ok {
+      background: var(--success-bg);
+      color: #a8e6c1;
+      border: 1px solid var(--success);
+    }
+    .feedback.bad {
+      background: var(--danger-bg);
+      color: #f0a0a0;
+      border: 1px solid var(--danger);
+    }
+
+    .quiz-controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0f1419;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--border); }
+
+    .progress-bar {
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 999px;
+      margin: 0 auto 20px;
+      max-width: 680px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      border-radius: 999px;
+      transition: width 0.35s ease;
+      width: 0%;
+    }
+
+    .score-line {
+      text-align: center;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .score-line strong {
+      color: var(--accent);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    /* Study reveal mode (cards) */
+    .study-question {
+      background: var(--surface2);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .study-question .q-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .study-answer {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.97rem;
+      line-height: 1.5;
+    }
+
+    .study-answer.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hint {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    kbd {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 0.78rem;
+      font-family: inherit;
+    }
+
+    .result-screen {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .result-screen h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+
+    .result-score {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 16px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Подготовка к личностям</h1>
+      <p>Материал строго по вашему файлу · 22 личности</p>
+      <div class="stats">
+        <div class="stat">Всего: <strong>22</strong></div>
+        <div class="stat">Режим: <strong id="current-mode">Список</strong></div>
+      </div>
+    </header>
+
+    <div class="modes">
+      <button class="mode-btn active" data-mode="list">Список</button>
+      <button class="mode-btn" data-mode="study">Карточки</button>
+      <button class="mode-btn" data-mode="quiz">Викторина</button>
+    </div>
+
+    <div class="search-wrap" id="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search" placeholder="Поиск по имени или ключевым словам..." autocomplete="off" />
+    </div>
+
+    <div class="list-area" id="list-area">
+      <div class="grid" id="grid"></div>
+      <div class="empty-state" id="empty" style="display:none;">
+        <div style="font-size:2rem;">🔍</div>
+        <p>Ничего не найдено</p>
+      </div>
+    </div>
+
+    <div class="study-area" id="study-area">
+      <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+      <div class="score-line" id="score-line" style="display:none;">
+        Правильно: <strong id="score-correct">0</strong> / <span id="score-total">0</span>
+      </div>
+      <div class="quiz-card" id="quiz-card">
+        <!-- dynamic content -->
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-overlay" id="overlay">
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-header">
+        <h2 id="detail-name"></h2>
+        <button class="close-btn" id="close-btn" title="Закрыть">×</button>
+      </div>
+      <div id="detail-body"></div>
+    </div>
+  </div>
+
+  <script>
+    const DATA = [
+      {
+        id: 1,
+        name: "Иосип Броз Тито",
+        short: "Лидер послевоенной Югославии",
+        years: "Президент с 1945 по 1980",
+        sections: [
+          { label: "Чем знаменит", text: "Лидер послевоенной Югославии, основатель и бессменный руководитель Социалистической Федеративной Республики Югославия (СФРЮ)." },
+          { label: "Что сделал", text: "Возглавил партизанское движение против нацистской оккупации, после войны консолидировал власть, проводил независимую от СССР политику (вступил в СЭВ, но не вошёл в Варшавский договор). Ввёл систему самоуправления на предприятиях. В 1974 году стал пожизненным президентом." },
+          { label: "Годы правления", text: "Президент с 1945 года до смерти в 1980 году." }
+        ]
+      },
+      {
+        id: 2,
+        name: "Чарльз Спенсер Чаплин",
+        short: "Великий актёр и режиссёр немого кино",
+        years: "",
+        sections: [
+          { label: "Чем знаменит", text: "Один из величайших актёров и режиссёров немого кино." },
+          { label: "Что сделал", text: "Выступал как актёр, режиссёр, сценарист, продюсер и композитор в своих фильмах. Среди знаковых работ — «Малыш» (1921), «Золотая лихорадка» (1925), «Огни большого города» (1931), «Великий диктатор» (1940) — острая сатира на Гитлера." }
+        ]
+      },
+      {
+        id: 3,
+        name: "Шарль де Голль",
+        short: "Символ Сопротивления, основатель Пятой республики",
+        years: "Президент Франции 1959–1969",
+        sections: [
+          { label: "Чем знаменит", text: "Французский военный и государственный деятель, символ Сопротивления во Второй мировой войне, основатель Пятой республики." },
+          { label: "Что сделал", text: "В 1940 году призвал французов к сопротивлению из Лондона, возглавив движение «Свободная Франция». После войны возглавлял Временное правительство. В 1958 году стал премьер-министром, а затем первым президентом Пятой республики. Проводил курс на укрепление суверенитета Франции, вывел страну из военной организации НАТО, инициировал ядерную программу." },
+          { label: "Годы правления", text: "Президент Франции с 1959 по 1969 год." }
+        ]
+      },
+      {
+        id: 4,
+        name: "Мартин Лютер Кинг",
+        short: "Лидер движения за гражданские права",
+        years: "",
+        sections: [
+          { label: "Чем знаменит", text: "Лидер движения за гражданские права афроамериканцев в США." },
+          { label: "Что сделал", text: "Выступал за ненасильственное сопротивление, вдохновляясь идеями Махатмы Ганди. Возглавил бойкот автобусных линий в Монтгомери (1955), организовал марши, в том числе марш на Вашингтон (1963), где произнёс речь «У меня есть мечта». Лауреат Нобелевской премии мира." }
+        ]
+      },
+      {
+        id: 5,
+        name: "Маргарет Тэтчер",
+        short: "Первая женщина — премьер-министр Великобритании",
+        years: "1979–1990",
+        sections: [
+          { label: "Чем знаменита", text: "Первая женщина — премьер-министр Великобритании (1979–1990), лидер Консервативной партии. Получила прозвище «Железная леди»." },
+          { label: "Что сделала", text: "Проводила политику тэтчеризма: приватизация государственных предприятий, сокращение влияния профсоюзов, жёсткая монетарная политика. При ней Великобритания одержала победу в Фолклендской войне (1982)." }
+        ]
+      },
+      {
+        id: 6,
+        name: "Дэн Сяопин",
+        short: "Фактический руководитель Китая, реформатор",
+        years: "Конец 1970-х — начало 1990-х",
+        sections: [
+          { label: "Чем знаменит", text: "Китайский государственный деятель, фактический руководитель страны с конца 1970-х до начала 1990-х годов." },
+          { label: "Что сделал", text: "Инициировал масштабные экономические реформы, взяв курс на «социализм с китайской спецификой»: открыл страну для иностранных инвестиций, создал специальные экономические зоны, реформировал сельское хозяйство." }
+        ]
+      },
+      {
+        id: 7,
+        name: "Си Цзиньпин",
+        short: "Действующий председатель КНР",
+        years: "С 2013 года",
+        sections: [
+          { label: "Чем знаменит", text: "Действующий председатель КНР (с 2013 года), генеральный секретарь ЦК КПК." },
+          { label: "Что сделал", text: "Выдвинул концепцию «китайской мечты» о великом возрождении нации. Усилил централизацию власти, провёл масштабную антикоррупционную кампанию. При нём Китай укрепил позиции в мировой экономике и технологиях." }
+        ]
+      },
+      {
+        id: 8,
+        name: "Махатма Ганди",
+        short: "Лидер движения за независимость Индии",
+        years: "",
+        sections: [
+          { label: "Чем знаменит", text: "Один из лидеров движения за независимость Индии от Великобритании." },
+          { label: "Что сделал", text: "Разработал и пропагандировал тактику ненасильственного сопротивления (сатьяграха). Организовывал кампании гражданского неповиновения." }
+        ]
+      },
+      {
+        id: 9,
+        name: "Ясир Арафат",
+        short: "Лидер палестинского национального движения",
+        years: "",
+        sections: [
+          { label: "Чем знаменит", text: "Лидер палестинского национального движения." },
+          { label: "Что сделал", text: "В 1950-х годах соучредил организацию «Фатх», которое с 1965 года вело вооружённую борьбу за права палестинцев. Позже стал лидером Организации освобождения Палестины (ООП). В 1993 году подписал «соглашения Осло» с Израилем, что привело к созданию Палестинской автономии. Лауреат Нобелевской премии мира." }
+        ]
+      },
+      {
+        id: 10,
+        name: "Патрис Лумумба",
+        short: "Первый премьер-министр ДР Конго",
+        years: "1960",
+        sections: [
+          { label: "Чем знаменит", text: "Первый премьер-министр Демократической Республики Конго после обретения независимости в 1960 году." },
+          { label: "Что сделал", text: "Выступал за единство страны и контроль над её ресурсами, критиковал колониальное наследие. Его правительство столкнулось с кризисом (сепаратизм в Катанге, вмешательство внешних сил). Лумумба был отстранён от власти, арестован и убит в 1961 году." }
+        ]
+      },
+      {
+        id: 11,
+        name: "Нельсон Мандела",
+        short: "Борец против апартеида, первый чернокожий президент ЮАР",
+        years: "Президент 1994–1999",
+        sections: [
+          { label: "Чем знаменит", text: "Борец против апартеида, первый чернокожий президент ЮАР (1994–1999)." },
+          { label: "Что сделал", text: "Возглавлял Африканский национальный конгресс (АНК), провёл годы в тюрьме за свою деятельность. После освобождения способствовал мирному переходу к демократии, стал символом примирения и национального единства." }
+        ]
+      },
+      {
+        id: 12,
+        name: "Фидель Кастро",
+        short: "Лидер Кубинской революции",
+        years: "",
+        sections: [
+          { label: "Чем знаменит", text: "Лидер Кубинской революции, многолетний руководитель Кубы." },
+          { label: "Что сделал", text: "Сверг режим Батисты, установил социалистический строй, сблизился с СССР. В период его руководства Куба стала социалистическим государством, противостоявшим США." }
+        ]
+      },
+      {
+        id: 13,
+        name: "Че Гевара",
+        short: "Аргентинский революционер, соратник Кастро",
+        years: "",
+        sections: [
+          { label: "Чем знаменит", text: "Аргентинский революционер, один из ключевых лидеров Кубинской революции." },
+          { label: "Что сделал", text: "Соратник Фиделя Кастро, участвовал в партизанской борьбе. После победы революции занимал государственные посты, затем выступал за распространение революционных идей в других странах Латинской Америки." }
+        ]
+      },
+      {
+        id: 14,
+        name: "Сальвадор Альенде",
+        short: "Президент Чили, первый избранный социалист",
+        years: "1970–1973",
+        sections: [
+          { label: "Чем знаменит", text: "Президент Чили (1970–1973), первый социалист, избранный на этот пост в результате демократических выборов." },
+          { label: "Что сделал", text: "Проводил социалистические реформы: национализацию ключевых отраслей экономики, аграрную реформу. Его политика вызвала острое противостояние с оппозицией и военными. Погиб во время военного переворота в 1973 году." }
+        ]
+      },
+      {
+        id: 15,
+        name: "Юрий Гагарин",
+        short: "Первый человек в космосе",
+        years: "12 апреля 1961",
+        sections: [
+          { label: "Чем знаменит", text: "Первый человек в космосе." },
+          { label: "Что сделал", text: "12 апреля 1961 года совершил полёт на корабле «Восток-1», став символом достижений советской космонавтики и вдохновив миллионы людей." }
+        ]
+      },
+      {
+        id: 16,
+        name: "Рональд Рейган",
+        short: "40-й президент США",
+        years: "1981–1989",
+        sections: [
+          { label: "Чем знаменит", text: "Президент США (1981–1989), республиканец." },
+          { label: "Что сделал", text: "Проводил политику «рейганомики» (снижение налогов, дерегулирование экономики). Усилил гонку вооружений, инициировал программу «Звёздных войн». Его президентство совпало с окончанием холодной войны." }
+        ]
+      },
+      {
+        id: 17,
+        name: "Давид Бен-Гурион",
+        short: "Основатель Израиля, первый премьер-министр",
+        years: "1948–1953, 1955–1963",
+        sections: [
+          { label: "Чем знаменит", text: "Один из основателей государства Израиль, первый премьер-министр (1948–1953, 1955–1963)." },
+          { label: "Что сделал", text: "Сыграл ключевую роль в провозглашении независимости Израиля в 1948 году. Руководил страной в период первых арабо-израильских войн, закладывал основы государственных институтов." }
+        ]
+      },
+      {
+        id: 18,
+        name: "Фульхенсио Батиста",
+        short: "Президент и диктатор Кубы",
+        years: "1930-е и 1950-е",
+        sections: [
+          { label: "Чем знаменит", text: "Президент и диктатор Кубы (в разные периоды в 1930-х и 1950-х годах)." },
+          { label: "Что сделал", text: "Его авторитарный режим, коррупция и социальное неравенство стали одной из причин Кубинской революции, в результате которой он был свергнут Фиделем Кастро." }
+        ]
+      },
+      {
+        id: 19,
+        name: "Михаил Горбачёв",
+        short: "Последний генсек ЦК КПСС, президент СССР",
+        years: "1985–1991",
+        sections: [
+          { label: "Чем знаменит", text: "Последний генеральный секретарь ЦК КПСС (1985–1991), первый и последний президент СССР (1990–1991)." },
+          { label: "Что сделал", text: "Инициировал политику перестройки и гласности, что привело к глубоким политическим и экономическим изменениям в СССР. Его курс способствовал окончанию холодной войны, но также привёл к распаду Советского Союза." }
+        ]
+      },
+      {
+        id: 20,
+        name: "Нил Армстронг",
+        short: "Первый человек на Луне",
+        years: "20 июля 1969",
+        sections: [
+          { label: "Чем знаменит", text: "Американский астронавт, первый человек, ступивший на поверхность Луны." },
+          { label: "Что сделал", text: "20 июля 1969 года в рамках миссии «Аполлон‑11» совершил посадку на Луну и произнёс ставшую исторической фразу: «Это один маленький шаг для человека, но гигантский скачок для всего человечества»." }
+        ]
+      },
+      {
+        id: 21,
+        name: "Джон Кеннеди",
+        short: "35-й президент США",
+        years: "1961–1963",
+        sections: [
+          { label: "Кто и когда", text: "35-й президент США, правил с 1961 по 1963 год. Стал одним из самых молодых глав американского государства в истории (43 года) и первым президентом-католиком. Убит в Далласе 22 ноября 1963 года — это одно из самых громких политических убийств XX века." },
+          { label: "Карибский кризис (1962)", text: "Самый опасный момент Холодной войны. После размещения советских ракет на Кубе мир оказался на грани ядерной войны; Кеннеди и Хрущёв нашли компромисс, и ракеты были выведены." },
+          { label: "Космическая гонка", text: "Знаменитая речь 1962 года «Мы выбираем полететь на Луну» задала цель высадиться на Луне до конца десятилетия (осуществилась в 1969-м уже после его смерти)." }
+        ]
+      },
+      {
+        id: 22,
+        name: "Конрад Аденауэр",
+        short: "Первый федеральный канцлер ФРГ",
+        years: "1949–1963",
+        sections: [
+          { label: "Кто и когда", text: "Первый федеральный канцлер ФРГ, правил с 1949 по 1963 год — целых 14 лет." },
+          { label: "«Эра Аденауэра»", text: "Период восстановления и стремительного экономического роста Западной Германии, тесно связанный с «экономическим чудом» Людвига Эрхарда, который был его министром экономики." },
+          { label: "Курс на Запад", text: "ФРГ вступила в НАТО (1955), вошла в основателей ЕЭС (предшественника Евросоюза, 1957) и стала одним из ключевых союзников США в Европе." }
+        ]
+      }
+    ];
+
+    // State
+    let mode = 'list';
+    let currentIndex = 0;
+    let revealed = false;
+    let filtered = [...DATA];
+    let quizOrder = [];
+    let quizIndex = 0;
+    let scoreCorrect = 0;
+    let answered = false;
+    let currentOptions = [];
+    let correctIndex = 0;
+
+    // DOM
+    const grid = document.getElementById('grid');
+    const empty = document.getElementById('empty');
+    const searchInput = document.getElementById('search');
+    const listArea = document.getElementById('list-area');
+    const studyArea = document.getElementById('study-area');
+    const searchWrap = document.getElementById('search-wrap');
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const currentModeEl = document.getElementById('current-mode');
+    const overlay = document.getElementById('overlay');
+    const detailName = document.getElementById('detail-name');
+    const detailBody = document.getElementById('detail-body');
+    const closeBtn = document.getElementById('close-btn');
+    const progress = document.getElementById('progress');
+    const quizCard = document.getElementById('quiz-card');
+    const scoreLine = document.getElementById('score-line');
+    const scoreCorrectEl = document.getElementById('score-correct');
+    const scoreTotalEl = document.getElementById('score-total');
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function getAllFacts() {
+      // Collect short descriptions for distractors
+      return DATA.map(p => p.short || p.sections[0].text);
+    }
+
+    function renderGrid() {
+      grid.innerHTML = '';
+      if (filtered.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+      empty.style.display = 'none';
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-num">№ ${p.id}</div>
+          <h3>${p.name}</h3>
+          <div class="short">${p.short}</div>
+          ${p.years ? `<div class="years">${p.years}</div>` : ''}
+        `;
+        card.addEventListener('click', () => openDetail(p));
+        grid.appendChild(card);
+      });
+    }
+
+    function openDetail(p) {
+      detailName.textContent = p.name;
+      detailBody.innerHTML = p.sections.map(s => `
+        <div class="section">
+          <div class="section-label">${s.label}</div>
+          <div class="section-content">${s.text}</div>
+        </div>
+      `).join('');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetail() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function setMode(m) {
+      mode = m;
+      modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === m));
+      currentModeEl.textContent = m === 'list' ? 'Список' : m === 'study' ? 'Карточки' : 'Викторина';
+
+      if (m === 'list') {
+        listArea.classList.remove('hidden');
+        studyArea.classList.remove('active');
+        searchWrap.style.display = 'block';
+        scoreLine.style.display = 'none';
+      } else {
+        listArea.classList.add('hidden');
+        studyArea.classList.add('active');
+        searchWrap.style.display = 'none';
+        currentIndex = 0;
+        revealed = false;
+        answered = false;
+        scoreCorrect = 0;
+
+        if (m === 'quiz') {
+          quizOrder = shuffle([...Array(DATA.length).keys()]);
+          quizIndex = 0;
+          scoreLine.style.display = 'block';
+          scoreCorrectEl.textContent = '0';
+          scoreTotalEl.textContent = DATA.length;
+          renderQuiz();
+        } else {
+          scoreLine.style.display = 'none';
+          renderStudy();
+        }
+      }
+    }
+
+    // ===== STUDY (карточки) — reveal =====
+    function renderStudy() {
+      const p = DATA[currentIndex];
+      const total = DATA.length;
+      progress.style.width = ((currentIndex + 1) / total * 100) + '%';
+
+      quizCard.innerHTML = `
+        <div class="quiz-num">${currentIndex + 1} / ${total}</div>
+        <div class="quiz-name">${p.name}</div>
+        <div id="study-qs"></div>
+        <div class="quiz-controls">
+          <button class="btn btn-secondary" id="btn-prev">← Назад</button>
+          <button class="btn btn-primary" id="btn-reveal">${revealed ? 'Скрыть ответы' : 'Показать ответы'}</button>
+          <button class="btn btn-secondary" id="btn-next">Вперёд →</button>
+        </div>
+        <div class="hint">Пробел — показать / скрыть · ← → — навигация</div>
+      `;
+
+      const qs = document.getElementById('study-qs');
+      qs.innerHTML = p.sections.map((s, i) => `
+        <div class="study-question">
+          <div class="q-label">${s.label}</div>
+          <div class="study-answer ${revealed ? 'visible' : ''}">${s.text}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('btn-prev').onclick = () => {
+        if (currentIndex > 0) { currentIndex--; revealed = false; renderStudy(); }
+      };
+      document.getElementById('btn-next').onclick = () => {
+        if (currentIndex < total - 1) { currentIndex++; revealed = false; renderStudy(); }
+      };
+      document.getElementById('btn-reveal').onclick = () => {
+        revealed = !revealed;
+        renderStudy();
+      };
+    }
+
+    // ===== QUIZ — description → choose person =====
+    function makeOptions(person) {
+      // Full description (all sections combined)
+      const fullText = person.sections.map(s => `<strong>${s.label}:</strong> ${s.text}`).join('<br><br>');
+      // Options = names of people
+      const correctName = person.name;
+      const otherNames = DATA.filter(p => p.id !== person.id).map(p => p.name);
+      const distractors = shuffle(otherNames).slice(0, 3);
+      const opts = shuffle([correctName, ...distractors]);
+      const correctIdx = opts.indexOf(correctName);
+      return { fullText, options: opts, correctIdx };
+    }
+
+    function renderQuiz() {
+      if (quizIndex >= quizOrder.length) {
+        // Results
+        const total = DATA.length;
+        const pct = Math.round((scoreCorrect / total) * 100);
+        progress.style.width = '100%';
+        quizCard.innerHTML = `
+          <div class="result-screen">
+            <h2>Готово!</h2>
+            <div class="result-score">${scoreCorrect} / ${total}</div>
+            <p style="color:var(--text-muted);margin-bottom:24px;">${pct}% правильных ответов</p>
+            <button class="btn btn-primary" id="btn-restart">Пройти ещё раз</button>
+          </div>
+        `;
+        document.getElementById('btn-restart').onclick = () => {
+          quizOrder = shuffle([...Array(DATA.length).keys()]);
+          quizIndex = 0;
+          scoreCorrect = 0;
+          scoreCorrectEl.textContent = '0';
+          answered = false;
+          renderQuiz();
+        };
+        return;
+      }
+
+      const p = DATA[quizOrder[quizIndex]];
+      const total = DATA.length;
+      progress.style.width = ((quizIndex) / total * 100) + '%';
+
+      const { fullText, options, correctIdx } = makeOptions(p);
+      currentOptions = options;
+      correctIndex = correctIdx;
+      answered = false;
+
+      quizCard.innerHTML = `
+        <div class="quiz-num">${quizIndex + 1} / ${total}</div>
+        <div class="quiz-label">Кто это?</div>
+        <div class="study-question" style="margin-bottom:20px; max-height:280px; overflow-y:auto;">
+          <div style="font-size:0.95rem; line-height:1.55;">${fullText}</div>
+        </div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+        <div class="quiz-controls">
+          <button class="btn btn-primary" id="btn-next-q" disabled>Далее →</button>
+        </div>
+      `;
+
+      const optsEl = document.getElementById('options');
+      options.forEach((text, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = text;
+        btn.dataset.idx = i;
+        btn.onclick = () => selectOption(i, correctIdx, btn);
+        optsEl.appendChild(btn);
+      });
+
+      document.getElementById('btn-next-q').onclick = () => {
+        quizIndex++;
+        renderQuiz();
+      };
+    }
+
+    function selectOption(chosen, correctIdx, btnEl) {
+      if (answered) return;
+      answered = true;
+
+      const allOpts = document.querySelectorAll('.option');
+      allOpts.forEach(o => o.classList.add('disabled'));
+
+      const isCorrect = chosen === correctIdx;
+      if (isCorrect) {
+        scoreCorrect++;
+        scoreCorrectEl.textContent = scoreCorrect;
+        btnEl.classList.add('correct');
+        document.getElementById('feedback').className = 'feedback show ok';
+        document.getElementById('feedback').textContent = '✓ Верно!';
+      } else {
+        btnEl.classList.add('wrong');
+        allOpts[correctIdx].classList.add('correct');
+        document.getElementById('feedback').className = 'feedback show bad';
+        document.getElementById('feedback').textContent = '✗ Неверно. Правильный ответ выделен зелёным.';
+      }
+
+      document.getElementById('btn-next-q').disabled = false;
+      progress.style.width = ((quizIndex + 1) / DATA.length * 100) + '%';
+    }
+
+    // Events
+    modeBtns.forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.trim().toLowerCase();
+      filtered = DATA.filter(p => {
+        const hay = (p.name + ' ' + p.short + ' ' + p.years + ' ' + p.sections.map(s => s.text).join(' ')).toLowerCase();
+        return hay.includes(q);
+      });
+      renderGrid();
+    });
+
+    closeBtn.addEventListener('click', closeDetail);
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeDetail();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (overlay.classList.contains('open')) {
+        if (e.key === 'Escape') closeDetail();
+        return;
+      }
+      if (mode === 'list') return;
+      if (mode === 'study') {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          revealed = !revealed;
+          renderStudy();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          if (currentIndex > 0) { currentIndex--; revealed = false; renderStudy(); }
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          if (currentIndex < DATA.length - 1) { currentIndex++; revealed = false; renderStudy(); }
+        }
+      }
+    });
+
+    // Init
+    renderGrid();
+  </script>
+</body>
+</html>
